@@ -5,13 +5,15 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
 import Card from "../components/card";
+import { getServerSideProps } from ".";
 
-const AddUser = () => {
+const AddUser = (props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
   const [error, setError] = useState({ name: "", email: "" });
   const router = useRouter();
+  const { api_url } = props;
 
   useEffect(() => {
     if (name && error.name !== "") {
@@ -37,7 +39,8 @@ const AddUser = () => {
       return;
     }
     try {
-      await axios.post("http://localhost:5000/users", {
+      // await axios.post("http://localhost:5000/users", {
+      await axios.post(`${api_url}users`, {
         name,
         email,
         gender,
@@ -141,3 +144,4 @@ const AddUser = () => {
 };
 
 export default AddUser;
+export { getServerSideProps };

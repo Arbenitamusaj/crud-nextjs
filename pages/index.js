@@ -5,39 +5,19 @@ import axios from "axios";
 import Link from "next/link";
 import { confirmAlert } from "react-confirm-alert";
 
-// function useWindowSize() {
-//   if (typeof window !== "undefined") {
-//     const [size, setSize] = useState(window.innerWidth);
-//     useEffect(() => {
-//       const handleResize = () => {
-//         setSize(window.innerWidth);
-//       };
-//       window.addEventListener("resize", handleResize);
-//       return () => {
-//         window.removeEventListener("resize", handleResize);
-//       };
-//     }, []);
-//     return size;
-//   }
-// }
-
-export default function Home() {
-  // const windowData = typeof window !== "undefined" && useWindowSize();
-
+export default function Home(props) {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState();
-  // const [width, setWidth] = useState(
-  //   typeof window !== "undefined" && windowData
-  // );
+  const { api_url } = props;
 
   useEffect(() => {
     getUsers();
-    // typeof window !== "undefined" && setWidth(windowData);
+    console.log(api_url);
     users ? setIsLoading(false) : setIsLoading(true);
   }, []);
 
   const getUsers = async () => {
-    const res = await axios.get("http://localhost:5000/users");
+    const res = await axios.get(`${api_url}users`);
     setUsers(res.data);
     return res.data;
   };
@@ -77,7 +57,7 @@ export default function Home() {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/users/${id}`);
+      await axios.delete(`${api_url}users/${id}`);
       getUsers();
     } catch (error) {
       console.log(error);
@@ -175,4 +155,14 @@ export default function Home() {
       </main>
     </div>
   );
+}
+
+export async function getServerSideProps() {
+  // console.log(process.env.API_endpoint);
+
+  return {
+    props: {
+      api_url: process.env.API_endpoint || null,
+    },
+  };
 }
