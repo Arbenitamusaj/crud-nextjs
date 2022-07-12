@@ -12,7 +12,6 @@ export default function Home(props) {
 
   useEffect(() => {
     getUsers();
-    console.log(api_url);
     users ? setIsLoading(false) : setIsLoading(true);
   }, []);
 

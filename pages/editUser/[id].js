@@ -5,18 +5,21 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Card from "../../components/card";
 import Link from "next/link";
+import { getServerSideProps } from "..";
 
-const EditUser = () => {
+const EditUser = (props) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
   const router = useRouter();
   const { id } = router.query;
+  const { api_url } = props;
 
   const getUserById = async () => {
     if (id) {
       try {
-        const res = await axios.get(`http://localhost:5000/users/${id}`);
+        // const res = await axios.get(`http://localhost:5000/users/${id}`);
+        const res = await axios.get(`${api_url}users/${id}`);
         setName(res.data.name);
         setEmail(res.data.email);
         setGender(res.data.gender);
@@ -30,7 +33,8 @@ const EditUser = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.patch(`http://localhost:5000/users/${id}`, {
+      // await axios.patch(`http://localhost:5000/users/${id}`, {
+      await axios.patch(`${api_url}users/${id}`, {
         name,
         email,
         gender,
@@ -125,3 +129,4 @@ const EditUser = () => {
 };
 
 export default EditUser;
+export { getServerSideProps };
