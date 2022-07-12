@@ -7,12 +7,12 @@ import { confirmAlert } from "react-confirm-alert";
 
 export default function Home(props) {
   const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState();
+  const [isLoading, setIsLoading] = useState(true);
   const { api_url } = props;
 
   useEffect(() => {
+    users && setIsLoading(false);
     getUsers();
-    users ? setIsLoading(false) : setIsLoading(true);
   }, []);
 
   const getUsers = async () => {
@@ -79,6 +79,7 @@ export default function Home(props) {
             Add User
           </button>
         </Link>
+        {isLoading && <p className="text-xl">DATA IS LOADING...</p>}
         <table
           className={`${styles.table} table-auto font-normal sm:block hidden`}
         >
@@ -90,9 +91,7 @@ export default function Home(props) {
               <th>Action</th>
             </tr>
           </thead>
-          {isLoading ? (
-            <p>Data is loading...</p>
-          ) : (
+          {!isLoading && (
             <tbody>
               {users.map((user, id) => (
                 <tr key={id}>
