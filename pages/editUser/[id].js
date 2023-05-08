@@ -19,33 +19,33 @@ const EditUser = (props) => {
     if (id) {
       try {
         // const res = await axios.get(`http://localhost:5000/users/${id}`);
-        const res = await axios.get(`http://localhost:3000/editUser/${id}`);
+        const res = await axios.get(`http://localhost:3000/api/users/${id}`);
         setName(res.data.name);
         setEmail(res.data.email);
         setGender(res.data.gender);
       } catch (error) {
         console.log(error);
-        return res;
       }
     }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // await axios.patch(`http://localhost:5000/users/${id}`, {
-      await axios.patch(`$http://localhost:3000/deleteUser/${id}`, {
-        name,
-        email,
-        gender,
-      });
-      router.push("/");
-    } catch (error) {
-      console.log(error);
-    }
-    console.log("Form Submitted");
-  };
+    e.preventDefault(); // prevent form from submitting normally
 
+    try {
+      // make a POST request to your API with the form data
+      const res = await axios.put("http://localhost:3000/api/update", {
+        data: { name, email, gender },
+      });
+
+      // redirect the user to the homepage if the user was successfully added
+      if (res.data.success) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
     getUserById();
   }, []);

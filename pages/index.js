@@ -3,63 +3,32 @@ import { useEffect, useState } from "react";
 import styles from "../styles/index.module.css";
 import axios from "axios";
 import Link from "next/link";
-import { confirmAlert } from "react-confirm-alert";
 
-export default function Home(props) {
+export default function UsersTable() {
   const [users, setUsers] = useState([]);
+  const [userId, setUserId] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const { api_url } = props;
 
   useEffect(() => {
-    users && setIsLoading(false);
-    getUsers();
+    async function fetchUsers() {
+      try {
+        const response = await fetch("/api/users");
+        const data = await response.json();
+        setUsers(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error(error);
+        setIsLoading(false);
+      }
+    }
+    fetchUsers();
   }, []);
-
-  const getUsers = async () => {
-    const res = await axios.get(`${api_url}users`);
-    setUsers(res.data);
-    return res.data;
-  };
-
-  const confirm = (userId, name) => {
-    confirmAlert({
-      customUI: ({ onClose }) => {
-        return (
-          <div className="card text-center">
-            <h1 className="text-4xl font-bold mb-2 text-red-400">
-              Are you sure?
-            </h1>
-            <p className="text-xl mb-4">You want to delete this user below?</p>
-            <p className="text-4xl mb-8">{name}</p>
-            <div className="border-t-2">
-              <button
-                onClick={onClose}
-                className="text-slate-500 font-bold mt-4 mx-4 py-4 px-8"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  deleteUser(userId);
-                  onClose();
-                }}
-                className="text-red-600 bg-red-200 mt-4 mx-4 py-4 px-8 font-bold rounded-xl"
-              >
-                Delete!
-              </button>
-            </div>
-          </div>
-        );
-      },
-    });
-  };
-
-  const deleteUser = async (id) => {
+  const handleDelete = async (id) => {
     try {
-      await axios.delete(`${api_url}users/${id}`);
-      getUsers();
+      await axios.delete(`http://localhost:3000/api/delete/${id}`);
+      setUsers(users.filter((user) => user._id !== id));
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -93,8 +62,8 @@ export default function Home(props) {
           </thead>
           {!isLoading && (
             <tbody>
-              {users.map((user, id) => (
-                <tr key={id}>
+              {users.map((user) => (
+                <tr key={user._id}>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.gender}</td>
@@ -104,7 +73,7 @@ export default function Home(props) {
                     </button>
                     <button
                       className="button bg-red-200 text-red-700 hover:shadow-red-700/30"
-                      onClick={() => confirm(user._id, user.name)}
+                      onClick={() => handleDelete(user._id)}
                     >
                       Delete
                     </button>
@@ -140,10 +109,7 @@ export default function Home(props) {
                 <button className="button bg-yellow-200 text-yellow-700 hover:shadow-yellow-700/30">
                   <Link href={`/editUser/${user._id}`}>Edit</Link>
                 </button>
-                <button
-                  className="button bg-red-200 text-red-700 hover:shadow-red-700/30"
-                  onClick={() => confirm(user._id, user.name)}
-                >
+                <button className="button bg-red-200 text-red-700 hover:shadow-red-700/30">
                   Delete
                 </button>
               </div>

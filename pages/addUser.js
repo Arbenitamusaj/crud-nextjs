@@ -15,8 +15,6 @@ const AddUser = (props) => {
   const router = useRouter();
   const { api_url } = props;
 
-
-
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   if (!name && !email) {
@@ -44,22 +42,23 @@ const AddUser = (props) => {
   //   }
   //   console.log("Form Submitted");
   // };
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post('http://localhost:3000/api/register', {
-      name,
-      email,
-      gender,
-    });
-    console.log(res.data);
-    router.push("/");
-  } catch (error) {
-    console.log(error);
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // prevent form from submitting normally
 
+    try {
+      // make a POST request to your API with the form data
+      const res = await axios.post("http://localhost:3000/api/register", {
+        data: { name, email, gender },
+      });
 
+      // redirect the user to the homepage if the user was successfully added
+      if (res.data.success) {
+        router.push("/");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <main className="main">
