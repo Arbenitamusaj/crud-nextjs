@@ -19,7 +19,7 @@ const EditUser = (props) => {
     if (id) {
       try {
         // const res = await axios.get(`http://localhost:5000/users/${id}`);
-        const res = await axios.get(`${api_url}users/${id}`);
+        const res = await axios.get(`http://localhost:3000/editUser/${id}`);
         setName(res.data.name);
         setEmail(res.data.email);
         setGender(res.data.gender);
@@ -34,7 +34,7 @@ const EditUser = (props) => {
     e.preventDefault();
     try {
       // await axios.patch(`http://localhost:5000/users/${id}`, {
-      await axios.patch(`${api_url}users/${id}`, {
+      await axios.patch(`$http://localhost:3000/deleteUser/${id}`, {
         name,
         email,
         gender,

@@ -13,6 +13,7 @@
     "autoprefixer": "^10.4.7",
     "axios": "^0.27.2",
     "babel": "^6.23.0",
+    "mongoose": "^7.1.0",
     "next": "12.2.0",
     "postcss": "^8.4.14",
     "react": "18.2.0",

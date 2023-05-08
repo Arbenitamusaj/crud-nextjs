@@ -15,42 +15,51 @@ const AddUser = (props) => {
   const router = useRouter();
   const { api_url } = props;
 
-  useEffect(() => {
-    if (name && error.name !== "") {
-      setError((prevState) => ({ ...prevState, name: "" }));
-    }
-    if (email && error.email !== "") {
-      setError((prevState) => ({ ...prevState, email: "" }));
-    }
-  }, [name, email]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!name && !email) {
-      setError({ name: "Nama belum Disi", email: "Email belum Diisi" });
-      return;
-    }
-    if (!name) {
-      setError((prevState) => ({ ...prevState, name: "Nama belum Diisi" }));
-      return;
-    }
-    if (!email) {
-      setError((prevState) => ({ ...prevState, email: "Email belum Diisi" }));
-      return;
-    }
-    try {
-      // await axios.post("http://localhost:5000/users", {
-      await axios.post(`${api_url}users`, {
-        name,
-        email,
-        gender,
-      });
-      router.push("/");
-    } catch (error) {
-      console.log(error);
-    }
-    console.log("Form Submitted");
-  };
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!name && !email) {
+  //     setError({ name: "Nama belum Disi", email: "Email belum Diisi" });
+  //     return;
+  //   }
+  //   if (!name) {
+  //     setError((prevState) => ({ ...prevState, name: "Nama belum Diisi" }));
+  //     return;
+  //   }
+  //   if (!email) {
+  //     setError((prevState) => ({ ...prevState, email: "Email belum Diisi" }));
+  //     return;
+  //   }
+  //   try {
+  //     // await axios.post("http://localhost:5000/users", {
+  //     await axios.post("http://localhost:3000/api/register", {
+  //       name,
+  //       email,
+  //       gender,
+  //     });
+  //     router.push("/");
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   console.log("Form Submitted");
+  // };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post('http://localhost:3000/api/register', {
+      name,
+      email,
+      gender,
+    });
+    console.log(res.data);
+    router.push("/");
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
 
   return (
     <main className="main">
