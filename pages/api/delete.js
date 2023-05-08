@@ -1,7 +1,8 @@
 import User from "../../model/User";
-
+import dbConnect from "../../lib/dbConnect";
 export default async function handler(req, res) {
   try {
+    const conn = await dbConnect();
     const { id } = req.query;
 
     // check if user with given id exists
@@ -11,7 +12,7 @@ export default async function handler(req, res) {
     }
 
     // delete the user
-    await user.remove();
+    await User.deleteOne({ _id: id });
 
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {

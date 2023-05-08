@@ -25,8 +25,10 @@ export default function UsersTable() {
   }, []);
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/delete/${id}`);
-      setUsers(users.filter((user) => user._id !== id));
+      console.log("Deleting user with ID:", id);
+      const response = await axios.delete(`/api/delete?id=${id}`);
+      console.log(response.data);
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -109,7 +111,10 @@ export default function UsersTable() {
                 <button className="button bg-yellow-200 text-yellow-700 hover:shadow-yellow-700/30">
                   <Link href={`/editUser/${user._id}`}>Edit</Link>
                 </button>
-                <button className="button bg-red-200 text-red-700 hover:shadow-red-700/30">
+                <button
+                  className="button bg-red-200 text-red-700 hover:shadow-red-700/30"
+                  onClick={() => handleDelete(user._id)}
+                >
                   Delete
                 </button>
               </div>

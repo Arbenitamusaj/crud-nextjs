@@ -34,12 +34,12 @@ const EditUser = (props) => {
 
     try {
       // make a POST request to your API with the form data
-      const res = await axios.put("http://localhost:3000/api/update", {
+      const res = await axios.put(`/api/update?id=${id}`, {
         data: { name, email, gender },
       });
 
       // redirect the user to the homepage if the user was successfully added
-      if (res.data.success) {
+      if (res.data.success === true) {
         router.push("/");
       }
     } catch (error) {
